@@ -15,13 +15,10 @@ from api.joke import joke_api # Blueprint import api definition
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
 from api.titanic import titanic_api
-<<<<<<< HEAD
 from api.collaborapost import post_api
-from api.stockMLapi import stock_api
-=======
 from api.concussion import concussion_api
 from api.songs import Song_api
->>>>>>> fd98e8d92bd76846ac16bfc5f6e635a330ff9c0d
+from api.stockMLapi import stock_api
 # database migrations
 from model.users import initUsers
 from model.players import initPlayers
@@ -43,14 +40,11 @@ app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(titanic_api) # register api routes
 app.register_blueprint(app_projects) # register app pages
-<<<<<<< HEAD
 app.register_blueprint(post_api)
-app.register_blueprint(stock_api)
-=======
 app.register_blueprint(concussion_api)
 app.register_blueprint(Song_api)
+app.register_blueprint(stock_api)
 
->>>>>>> fd98e8d92bd76846ac16bfc5f6e635a330ff9c0d
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
