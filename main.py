@@ -18,6 +18,7 @@ from api.titanic import titanic_api
 from api.collaborapost import post_api
 from api.concussion import concussion_api
 from api.songs import Song_api
+from api.model import model_api
 # from api.stockMLapi import stock_api
 # database migrations
 from model.users import initUsers
@@ -43,6 +44,7 @@ app.register_blueprint(app_projects) # register app pages
 app.register_blueprint(post_api)
 app.register_blueprint(concussion_api)
 app.register_blueprint(Song_api)
+app.register_blueprint(model_api)
 # app.register_blueprint(stock_api)
 
 
