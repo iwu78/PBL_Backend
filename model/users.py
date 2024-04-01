@@ -18,15 +18,19 @@ class Post(db.Model):
     # Define the Notes schema
     id = db.Column(db.Integer, primary_key=True)
     note = db.Column(db.Text, unique=False, nullable=False)
-    image = db.Column(db.String, unique=False)
+    doq = db.Column(db.Date, unique=False)
+    parentPostId = db.Column(db.Integer,  unique=False, nullable=False)
+
     # Define a relationship in Notes Schema to userID who originates the note, many-to-one (many notes to one user)
     userID = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Constructor of a Notes object, initializes of instance variables within object
-    def __init__(self, id, note, image):
+    def __init__(self, id, note, doq, parentPostId):
         self.userID = id
         self.note = note
-        self.image = image
+        self.doq = doq
+        self.parentPostId = parentPostId
+
 
     # Returns a string representation of the Notes object, similar to java toString()
     # returns string
@@ -49,18 +53,19 @@ class Post(db.Model):
     # returns dictionary
     def read(self):
         # encode image
-        path = app.config['UPLOAD_FOLDER']
-        file = os.path.join(path, self.image)
-        file_text = open(file, 'rb')
-        file_read = file_text.read()
-        file_encode = base64.encodebytes(file_read)
+        #path = app.config['UPLOAD_FOLDER']
+        #file = os.path.join(path, self.image)
+        #file_text = open(file, 'rb')
+        #file_read = file_text.read()
+        #file_encode = base64.encodebytes(file_read)
         
         return {
             "id": self.id,
             "userID": self.userID,
             "note": self.note,
-            "image": self.image,
-            "base64": str(file_encode)
+            "doq": self.doq,
+            "parentPostId": self.parentPostId
+            #"base64": str(file_encode)
         }
 
 
