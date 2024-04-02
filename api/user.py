@@ -4,7 +4,7 @@ from flask_restful import Api, Resource # used for REST API building
 from datetime import datetime
 from auth_middleware import token_required
 
-from model.users import User
+from model.users import User, Design
 
 user_api = Blueprint('user_api', __name__,
                    url_prefix='/api/users')
@@ -14,8 +14,6 @@ api = Api(user_api)
 
 class UserAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
-        
-    
         def put(self, current_user):
             body = request.get_json() # get the body of the request
             uid = body.get('uid') # get the UID (Know what to reference)
@@ -88,7 +86,109 @@ class UserAPI:
             user.delete() 
             # 204 is the status code for delete with no json response
             return f"Deleted user: {json}", 204 # use 200 to test with Postman
-         
+        
+        @token_required
+        def patch(self, current_user):
+            token = request.cookies.get("jwt")
+            cur_user = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])['_uid']
+            users = User.query.all()
+            for user in users:
+                if user.uid==cur_user:
+                    thing = {
+                        "id": user.id,
+                        "name": user.name,
+                        "uid": user.uid,
+                        "type": user.type,
+                    }
+                    return jsonify(thing)
+    
+    class _SearchCRUD(Resource):
+        def post(self): # Create design
+            ''' Read data for json body '''
+            token = request.cookies.get("jwt")
+            cur_user = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])['_uid']
+            users = User.query.all()
+            for user in users:
+                if user.uid==cur_user: # modified with the and user.id==cur_user so random users can't delete other ppl
+                    id = user.id
+            print("here")
+            body = request.get_json()
+            name = body.get('name')
+            content = body.get('content')
+            description = body.get('description')
+            type = body.get('type')
+            if (type != "public" and type != "private"):
+                return {'message': f'Design type must be public or private'}, 400
+            do = Design(id=id, type=type, content=content, name=name,description=description)
+            design = do.create()
+            # success returns json of user
+            if design:
+                return jsonify(user.read())
+            
+        def get(self):
+            design_return=[]# all designs stored in the database
+            designs = Design.query.all()
+            for design in designs: # we going through every design
+                if(design.read()['Type']=='public'):
+                    design_return.append(design.__repr__())
+            return jsonify({"Designs":design_return}) # returning designs of all users that are public
+        
+        def delete(self):
+            body = request.get_json() # get the body of the request
+            token = request.cookies.get("jwt")
+            cur_user = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])['_uid']
+            users = User.query.all()
+            for user in users:
+                if user.uid==cur_user: # modified with the and user.id==cur_user so random users can't delete other ppl
+                    id = user.id
+            like = body.get('like')
+            dislike = body.get('dislike')
+            name = body.get('name')
+            if (like != "add") and (dislike != "add") and (like != "remove") and (dislike != "remove"):
+                return f"Like/Dislike must be add or remove", 400
+            designs = Design.query.all()
+            for design in designs:
+                if design.userID == id and design.name == name:
+                    design.update('','','', (1 if like == "add" else (-1 if like == "remove" else 0)), (1 if dislike == "add" else (-1 if dislike == "remove" else 0)))
+                    return f"{design.read()} Updated"
+            return f"Cannot locate design", 400 
+        
+        def put(self):
+            body = request.get_json() # get the body of the request
+            token = request.cookies.get("jwt")
+            cur_user = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])['_uid']
+            users = User.query.all()
+            for user in users:
+                if user.uid==cur_user: # modified with the and user.id==cur_user so random users can't delete other ppl
+                    id = user.id
+            name = body.get('name')
+            content = body.get('content')
+            type = body.get('type')
+            description = body.get('description')
+            designs = Design.query.all()
+            for design in designs:
+                if design.userID == id and design.name == name:
+                    design.update('',content,type,0,0,description)
+                    return f"{design.read()} Updated"
+            return f"Cannot locate design", 400   
+    
+
+    class _DesignCRUD(Resource):  # Design CRUD
+        def patch(self, current_user):
+            body = request.get_json() # get the body of the request
+            name = body.get('name')
+            token = request.cookies.get("jwt")
+            cur_user = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])['_uid']
+            users = User.query.all()
+            for user in users:
+                if user.uid==cur_user: # modified with the and user.id==cur_user so random users can't delete other ppl
+                    id = user.id
+            designs = Design.query.all()
+            for design in designs:
+                if design.userID == id and design.name == name:
+                    return jsonify(design.read())
+            return f"Cannot locate design", 400 
+        
     class _Security(Resource):
         def post(self):
             try:
@@ -147,5 +247,7 @@ class UserAPI:
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
+    api.add_resource(_DesignCRUD, '/design')
+    api.add_resource(_SearchCRUD, '/search')
     api.add_resource(_Security, '/authenticate')
     

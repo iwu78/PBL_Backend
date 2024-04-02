@@ -11,6 +11,80 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 ''' Tutorial: https://www.sqlalchemy.org/library.html#tutorials, try to get into Python shell and follow along '''
 
+class Design(db.Model):
+    __tablename__ = 'designs'
+
+    name = db.Column(db.String, unique=False, primary_key=True)
+    type = db.Column(db.Text, unique=False, nullable=False)
+    content = db.Column(db.String, unique=False)
+    # Define a relationship in Notes Schema to userID who originates the note, many-to-one (many notes to one user)
+    userID = db.Column(db.Integer, db.ForeignKey('users.id'))
+    likes = db.Column(db.Integer, unique=False, nullable=False)
+    dislikes = db.Column(db.Integer, unique=False, nullable=False)
+    description = db.Column(db.String, unique=False, nullable=False)
+    def __init__(self, id, type, content, name, likes=0, dislikes=0, description=""):
+        self.userID = id
+        self.type = type
+        self.content = content
+        self.name = name
+        self.likes = likes
+        self.dislikes = dislikes
+        self.description = description
+
+    # Returns a string representation of the Notes object, similar to java toString()
+    # returns string
+    def __repr__(self):
+        return {"Name": self.name, "Content": self.content, "Type": self.type, "Owner": self.userID, "Likes": self.likes, "Dislikes": self.dislikes, "Description": self.description,}
+
+    # CRUD create, adds a new record to the Notes table
+    # returns the object added or None in case of an error
+    def create(self):
+        try:
+            # creates a Notes object from Notes(db.Model) class, passes initializers
+            db.session.add(self)  # add prepares to persist person object to Notes table
+            db.session.commit()  # SqlAlchemy "unit of work pattern" requires a manual commit
+            return self
+        except IntegrityError as e:
+            print(e)
+            db.session.remove()
+            return None
+
+    # CRUD read, returns dictionary representation of Notes object
+    # returns dictionary
+    def read(self):
+        
+        return {
+            "Name": self.name,
+            "Owner": self.userID,
+            "Content": self.content,
+            "Type": self.type,
+            "Likes": self.likes,
+            "Dislikes": self.dislikes,
+            "Description": self.description,
+        }
+    
+    def update(self, name="", content="", type="", likes=0, dislikes=0, description=''):
+        """only updates values with length"""
+        if len(name) > 0:
+            self.name = name
+        if len(content) > 0:
+            self.content = content
+        if len(type) > 0:
+            self.type = type
+        if likes != 0:
+            self.likes += likes
+        if dislikes != 0:
+            self.dislikes += dislikes
+        if len(description) != 0:
+            self.description = description
+        db.session.commit()
+        return self
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return None
+
 # Define the Post class to manage actions in 'posts' table,  with a relationship to 'users' table
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -90,6 +164,7 @@ class User(db.Model):
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
     posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
+    designs = db.relationship("Design", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
     def __init__(self, name, uid, password="123qwerty", dob=date.today(), hashmap={}, role="User", score=0):
