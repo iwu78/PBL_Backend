@@ -85,18 +85,21 @@ class User(db.Model):
     _dob = db.Column(db.Date)
     _hashmap = db.Column(db.JSON, unique=False, nullable=True)
     _role = db.Column(db.String(20), default="User", nullable=False)
+    _score = db.Column(db.Integer, default =0)
+
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
     posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, name, uid, password="123qwerty", dob=date.today(), hashmap={}, role="User"):
+    def __init__(self, name, uid, password="123qwerty", dob=date.today(), hashmap={}, role="User", score=0):
         self._name = name    # variables with self prefix become part of the object, 
         self._uid = uid
         self.set_password(password)
         self._dob = dob
         self._hashmap = hashmap
         self._role = role
+        self._score= score
 
     # a name getter method, extracts name from object
     @property
@@ -108,6 +111,14 @@ class User(db.Model):
     def name(self, name):
         self._name = name
     
+    @property
+    def score(self):
+        return self._score
+    
+    # a setter function, allows name to be updated after initial object creation
+    @score.setter
+    def score(self, score):
+        self._name = score
     # a getter method, extracts email from object
     @property
     def uid(self):
@@ -200,12 +211,13 @@ class User(db.Model):
             "dob": self.dob,
             "age": self.age,
             "hashmap": self._hashmap,
+            "score": self.score
             # "posts": [post.read() for post in self.posts]
         }
 
     # CRUD update: updates user name, password, phone
     # returns self
-    def update(self, name="", uid="", password=""):
+    def update(self, name="", uid="", password="",score =0):
         """only updates values with length"""
         if len(name) > 0:
             self.name = name
@@ -213,6 +225,9 @@ class User(db.Model):
             self.uid = uid
         if len(password) > 0:
             self.set_password(password)
+        if score>=0:
+             self.score=score
+
         db.session.commit()
         return self
 
