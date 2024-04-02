@@ -73,7 +73,9 @@ class UserAPI:
         def get(self, _): # Read Method, the _ indicates current_user is not used
             users = User.query.all()    # read/extract all users from database
             json_ready = [user.read() for user in users]  # prepare output in json
-            return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
+            json_ready_sorted = sorted(json_ready, key=lambda x: x.get('score', 0), reverse=True)  # sort for the leaderboard
+
+            return jsonify(json_ready_sorted)  # jsonify creates Flask response object, more specific to APIs than json.dumps
    
         @token_required("Admin")
         def delete(self, _): # Delete Method
