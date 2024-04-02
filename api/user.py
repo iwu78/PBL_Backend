@@ -15,6 +15,19 @@ api = Api(user_api)
 class UserAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
         
+    
+        def put(self, current_user):
+            body = request.get_json() # get the body of the request
+            uid = body.get('uid') # get the UID (Know what to reference)
+            name = body.get('name')
+            password = body.get('password')
+            score = body.get('score')
+            users = User.query.all()
+            for user in users:
+                if user.uid == uid:
+                    user.update(name,'',password, score)
+            return f"{user.read()} Updated"
+            
         def post(self): # Create method
             ''' Read data for json body '''
             body = request.get_json()
