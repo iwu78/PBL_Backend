@@ -19,6 +19,7 @@ from api.collaborapost import post_api
 from api.concussion import concussion_api
 from api.songs import Song_api
 from api.model import model_api
+from api.image import images_bp
 # from api.stockMLapi import stock_api
 # database migrations
 from model.users import initUsers
@@ -26,6 +27,7 @@ from model.players import initPlayers
 from model.titanicML import initTitanic
 from model.concussion import initConcussion
 from model.songs import initSongs
+from model.images import initEasyImages
 
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -45,6 +47,7 @@ app.register_blueprint(post_api)
 app.register_blueprint(concussion_api)
 app.register_blueprint(Song_api)
 app.register_blueprint(model_api)
+app.register_blueprint(images_bp)
 # app.register_blueprint(stock_api)
 
 
@@ -71,11 +74,15 @@ def generate_data():
     initPlayers()
     initTitanic()
     initConcussion()
+    initEasyImages()
+
 
 @app.before_request
 def before_request():
     initSongs()
-
+     allowed_origin = request.headers.get('Origin')
+    if allowed_origin in ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://nighthawkcoders.github.io']:
+        cors._origins = allowed_origin
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)
         
