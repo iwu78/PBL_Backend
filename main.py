@@ -80,7 +80,7 @@ def generate_data():
 @app.before_request
 def before_request():
     initSongs()
-     allowed_origin = request.headers.get('Origin')
+    allowed_origin = request.headers.get('Origin')
     if allowed_origin in ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://nighthawkcoders.github.io']:
         cors._origins = allowed_origin
 # Register the custom command group with the Flask application
