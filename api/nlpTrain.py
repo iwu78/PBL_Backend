@@ -117,15 +117,6 @@ class ImageCaptioningModel:
         with open('max_length.txt', 'w') as f:
             f.write(str(self.max_length))
 
-    def _plot_history(self):
-        plt.figure(figsize=(20, 8))
-        plt.plot(self.history.history['loss'])
-        plt.plot(self.history.history['val_loss'])
-        plt.title('Model Loss')
-        plt.ylabel('Loss')
-        plt.xlabel('Epoch')
-        plt.legend(['Train', 'Val'], loc='upper left')
-        plt.show()
 
     def predict_caption(self, image_path):
         feature = self._extract_feature_for_prediction(image_path)
