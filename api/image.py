@@ -49,5 +49,3 @@ images_api.add_resource(PostImagesAPI, '/upload')
         
 
             
-    
-    
