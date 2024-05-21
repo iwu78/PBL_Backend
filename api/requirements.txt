@@ -1,0 +1,8 @@
+numpy
+pandas
+os-sys
+tensorflow
+tqdm
+matplotlib
+seaborn
+textwrap
