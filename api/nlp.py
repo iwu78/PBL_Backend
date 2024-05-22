@@ -20,7 +20,7 @@ class ImageCaptioningModel:
         with open(max_length_path, 'r') as f:
             self.max_length = int(f.read())
         self.fe_model = fe_model
-
+        print("cope harder shubhay")
     def read_image(self, path, img_size=224):
         img = load_img(path, color_mode='rgb', target_size=(img_size, img_size))
         img = img_to_array(img)
