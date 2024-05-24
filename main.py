@@ -13,16 +13,17 @@ from __init__ import app, db, cors  # Definitions initialization
 from api.covid import covid_api # Blueprint import api definition
 from api.joke import joke_api # Blueprint import api definition
 from api.user import user_api # Blueprint import api definition
-from api.player import player_api
-from api.titanic import titanic_api
-from api.collaborapost import post_api
-from api.concussion import concussion_api
-from api.songs import Song_api
-from api.model import model_api
+from api.player import player_api # teacher example API definition
+from api.titanic import titanic_api # Group Machine Learning Project API definition
+from api.collaborapost import post_api # MY PERSONAL API DEFINITION
+from api.concussion import concussion_api # Group Machine Learning Project API definition
+from api.songs import Song_api # Group Partner API definition
+from api.model import model_api 
 from api.image import images_bp
 from api.places import places_api
 # from api.stockMLapi import stock_api
-# database migrations
+
+# Teammate database migrations
 from model.users import initUsers
 from model.players import initPlayers
 from model.titanicML import initTitanic
@@ -38,14 +39,14 @@ from projects.projects import app_projects # Blueprint directory import projects
 db.init_app(app)
 
 # register URIs
-app.register_blueprint(joke_api) # register api routes
-app.register_blueprint(covid_api) # register api routes
-app.register_blueprint(user_api) # register api routes
-app.register_blueprint(player_api)
-app.register_blueprint(titanic_api) # register api routes
-app.register_blueprint(app_projects) # register app pages
-app.register_blueprint(post_api)
-app.register_blueprint(concussion_api)
+app.register_blueprint(joke_api) # register teacher api routes
+app.register_blueprint(covid_api) # register teacehr api routes
+app.register_blueprint(user_api) # register teacher api routes
+app.register_blueprint(player_api) # register teacher api routes
+app.register_blueprint(titanic_api) # register teacher api routes
+app.register_blueprint(app_projects) # register teacher app pages
+app.register_blueprint(post_api) #registering my personal API
+app.register_blueprint(concussion_api) #registering Group ML api
 app.register_blueprint(Song_api)
 app.register_blueprint(model_api)
 app.register_blueprint(images_bp)

@@ -70,6 +70,7 @@ def initSongs():
     {'name':'Trust issues', 'url':'', 'description':'Drake', 'uri':'https://i1.sndcdn.com/artworks-QHAz47bKkwaj-0-t500x500.jpg', 'tokens':'28'},
     {'name':'Gods Plan', 'url':'', 'description':'Drake ', 'uri':'https://i.ytimg.com/vi/m1a_GqJf02M/maxresdefault.jpg', 'tokens':'29'},
     {'name':'Time to Pretend', 'url':'', 'description':'MGMT ', 'uri':'https://i.scdn.co/image/ab67616d0000b2738b32b139981e79f2ebe005eb', 'tokens':'30'},
+     {'name':'Sensei Wu', 'url':'/audios/WU.mp3', 'description':' Ian Wu Father ', 'uri':'https://m.media-amazon.com/images/I/51Zl1Tdk3YL._AC_UF894,1000_QL80_.jpg', 'tokens':'31'},
     ]
 
         
