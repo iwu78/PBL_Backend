@@ -20,6 +20,7 @@ from api.concussion import concussion_api
 from api.songs import Song_api
 from api.model import model_api
 from api.image import images_bp
+from api.places import places_api
 # from api.stockMLapi import stock_api
 # database migrations
 from model.users import initUsers
@@ -48,6 +49,7 @@ app.register_blueprint(concussion_api)
 app.register_blueprint(Song_api)
 app.register_blueprint(model_api)
 app.register_blueprint(images_bp)
+app.register_blueprint(places_api)
 # app.register_blueprint(stock_api)
 
 
