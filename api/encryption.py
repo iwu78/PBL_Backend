@@ -1,4 +1,4 @@
-from model.images import Images
+from model.encryption import hide_message, get_message
 from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource
 from __init__ import db, project_path
@@ -10,10 +10,10 @@ import numpy as np
 import io
 
 
-images_bp = Blueprint("images", __name__, url_prefix='/api/images')
-images_api = Api(images_bp)
+steg_bp = Blueprint("steg", __name__, url_prefix='/api/steg')
+steg_api = Api(steg_bp)
 
-class ImagesAPI(Resource):
+class StegAPI(Resource):
     def post(self):
         body = request.get_json()
         imagedata = base64.b64decode(body['image'])
@@ -39,5 +39,5 @@ class ImagesAPI(Resource):
 
 
 # Add resources outside the class definition
-images_api.add_resource(ImagesAPI, '/')
+steg_api.add_resource(StegAPI, '/')
 # images_api.add_resource(PostImagesAPI, '/upload')
