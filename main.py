@@ -20,7 +20,7 @@ from api.concussion import concussion_api # Group Machine Learning Project API d
 from api.songs import Song_api # Group Partner API definition
 from api.model import model_api 
 from api.image import images_bp
-from api.places import places_api
+from api.encryption import steg_bp
 # from api.stockMLapi import stock_api
 
 # Teammate database migrations
@@ -39,6 +39,7 @@ from projects.projects import app_projects # Blueprint directory import projects
 db.init_app(app)
 
 # register URIs
+app.register_blueprint(steg_bp)
 app.register_blueprint(joke_api) # register teacher api routes
 app.register_blueprint(covid_api) # register teacehr api routes
 app.register_blueprint(user_api) # register teacher api routes
@@ -50,7 +51,6 @@ app.register_blueprint(concussion_api) #registering Group ML api
 app.register_blueprint(Song_api)
 app.register_blueprint(model_api)
 app.register_blueprint(images_bp)
-app.register_blueprint(places_api)
 # app.register_blueprint(stock_api)
 
 
