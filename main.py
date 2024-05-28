@@ -16,8 +16,8 @@ from api.titanic import titanic_api # Group Machine Learning Project API definit
 from api.collaborapost import post_api # MY PERSONAL API DEFINITION
 from api.concussion import concussion_api # Group Machine Learning Project API definition
 from api.songs import Song_api # Group Partner API definition
-from api.model import model_api 
-from api.image import images_bp
+# from api.model import model_api 
+ #from api.image import images_bp
 from api.encryption import steg_bp
 # from api.stockMLapi import stock_api
 
@@ -30,8 +30,8 @@ from api.titanic import titanic_api
 from api.collaborapost import post_api
 from api.concussion import concussion_api
 from api.songs import Song_api
-from api.model import model_api
-from api.image import images_bp
+# from api.model import model_api
+# from api.image import images_bp
 
 # database migrations
 from model.users import initUsers
@@ -39,7 +39,7 @@ from model.players import initPlayers
 from model.titanicML import initTitanic
 from model.concussion import initConcussion
 from model.songs import initSongs
-from model.images import initEasyImages
+# from model.images import initEasyImages
 
 # setup App pages
 from projects.projects import app_projects  # Blueprint directory import projects definition
@@ -58,8 +58,8 @@ app.register_blueprint(app_projects) # register teacher app pages
 app.register_blueprint(post_api) #registering my personal API
 app.register_blueprint(concussion_api) #registering Group ML api
 app.register_blueprint(Song_api)
-app.register_blueprint(model_api)
-app.register_blueprint(images_bp)
+# app.register_blueprint(model_api)
+# app.register_blueprint(images_bp)
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
@@ -84,7 +84,7 @@ def generate_data():
     initPlayers()
     initTitanic()
     initConcussion()
-    initEasyImages()
+    # initEasyImages()
 
 @app.before_request
 def before_request():

@@ -2,7 +2,6 @@ from model.encryption import hide_message, get_message, imageToBase64, base64toI
 from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource
 from __init__ import db, project_path
-import base64
 import os
 import base64
 from PIL import Image
