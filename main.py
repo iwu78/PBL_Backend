@@ -30,16 +30,9 @@ from api.titanic import titanic_api
 from api.collaborapost import post_api
 from api.concussion import concussion_api
 from api.songs import Song_api
-<<<<<<< HEAD
-from api.model import model_api
-from api.image import images_bp
 from api.recovery import recovery_api
-from api.nlp import nlp_api
-from api.caption import caption_api  # Import the new caption API
-=======
 # from api.model import model_api
 # from api.image import images_bp
->>>>>>> 99204884e130099584ce9fe2c8a97044ad03be56
 
 # database migrations
 from model.users import initUsers
@@ -66,17 +59,9 @@ app.register_blueprint(app_projects) # register teacher app pages
 app.register_blueprint(post_api) #registering my personal API
 app.register_blueprint(concussion_api) #registering Group ML api
 app.register_blueprint(Song_api)
-<<<<<<< HEAD
-app.register_blueprint(model_api)
-app.register_blueprint(images_bp)
-app.register_blueprint(places_api)
 app.register_blueprint(recovery_api)
-# app.register_blueprint(stock_api)
-
-=======
 # app.register_blueprint(model_api)
 # app.register_blueprint(images_bp)
->>>>>>> 99204884e130099584ce9fe2c8a97044ad03be56
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
