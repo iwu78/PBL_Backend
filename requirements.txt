@@ -16,4 +16,4 @@ IPython
 pathlib
 seaborn
 yfinance
-turtle
+scikit-learn
