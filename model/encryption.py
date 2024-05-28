@@ -1,3 +1,19 @@
+from PIL import Image, ImageOps
+import base64
+from io import BytesIO
+
+def imageToBase64(image):
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue())
+    img_str = img_str.decode('utf-8')
+    return img_str
+
+def base64toImage(base64string):
+    img_str = base64.b64decode(base64string)
+    image = Image.open(BytesIO(img_str))
+    return image
+
 def hide_message(message, image):
     print('began')
     message += '\0'
@@ -16,7 +32,7 @@ def hide_message(message, image):
         newImage[position] = (image[position] & (~((1 << num_bits) - 1))) | (ord(message[(position - 1) * num_bits // 8]) >> (8 - ((position - 1) * num_bits % 8 + num_bits))) & ((1 << num_bits) - 1)
         position += 1
 
-    return newImage
+    return newImage, num_bits, position - 1
 
 def get_message(image):
     message = []

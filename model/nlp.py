@@ -1,39 +1,55 @@
-import os
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torchvision import datasets, models, transforms
-from torch.utils.data import DataLoader
-from collections import Counter
-from PIL import Image
-from io import BytesIO
+class ImageCaptioningModel:
+    def __init__(self, image_path, captions_path, batch_size=64, img_size=224):
+        # Initialize attributes
+        self.image_path = image_path
+        self.captions_path = captions_path
+        self.batch_size = batch_size
+        self.img_size = img_size
+        self.data = None
+        self.tokenizer = None
+        self.vocab_size = None
+        self.max_length = None
+        self.features = {}
+        self.model = None
+        self.history = None
 
-class NlpClassifier:
-    def _preprocess_data(self):
-        pass
+    # Other methods...
 
-    def _initialize_model(self):
-        pass
+    def build_model(self):
+        # Define the model architecture
+        input1 = Input(shape=(1920,))
+        input2 = Input(shape=(self.max_length,))
 
-    def train_model(self, num_epochs=10):
-        criterion = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+        img_features = Dense(256, activation='relu')(input1)
+        img_features_reshaped = Reshape((1, 256), input_shape=(256,))(img_features)
 
-        self.model.train()
-        for epoch in range(num_epochs):
-            running_loss = 0.0
-            for inputs, labels in self.data_loader:
-                optimizer.zero_grad()
-                outputs = self.model(inputs)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
-                running_loss += loss.item() * inputs.size(0)
-            epoch_loss = running_loss / len(self.image_dataset)
-            print(f"Epoch {epoch+1}/{num_epochs}, Loss: {epoch_loss:.4f}")
+        sentence_features = Embedding(self.vocab_size, 256, mask_zero=False)(input2)
+        merged = concatenate([img_features_reshaped, sentence_features], axis=1)
+        sentence_features = LSTM(256)(merged)
+        x = Dropout(0.5)(sentence_features)
+        x = add([x, img_features])
+        x = Dense(128, activation='relu')(x)
+        x = Dropout(0.5)(x)
+        output = Dense(self.vocab_size, activation='softmax')(x)
 
-    def predict_image_class(self, image):
-        pass
+        # Compile the model
+        self.model = Model(inputs=[input1, input2], outputs=output)
+        self.model.compile(loss='categorical_crossentropy', optimizer='adam')
 
-def initNlp():
-    nlp_classifier = NlpClassifier(dataset_path='./nlp')
+    def train_model(self, epochs=50):
+        # Train the model
+        train_generator = CustomDataGenerator(df=self.train, X_col='image', y_col='caption', batch_size=self.batch_size,
+                                              directory=self.image_path, tokenizer=self.tokenizer, vocab_size=self.vocab_size,
+                                              max_length=self.max_length, features=self.features)
+
+        validation_generator = CustomDataGenerator(df=self.test, X_col='image', y_col='caption', batch_size=self.batch_size,
+                                                   directory=self.image_path, tokenizer=self.tokenizer, vocab_size=self.vocab_size,
+                                                   max_length=self.max_length, features=self.features)
+
+        self.history = self.model.fit(train_generator, epochs=epochs, validation_data=validation_generator,
+                                      callbacks=[checkpoint, earlystopping, learning_rate_reduction])
+
+        # Save the model after training
+        self.model.save('image_captioning_model.h5')
+
+        self._plot_history()

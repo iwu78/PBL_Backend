@@ -13,13 +13,24 @@ caption_api = Blueprint('caption_api', __name__, url_prefix='/api/caption')
 api = Api(caption_api)
 
 class ImageCaptioningModel:
-    def __init__(self, model_path, tokenizer_path, max_length_path, fe_model):
-        self.caption_model = tf.keras.models.load_model(model_path)
-        with open(tokenizer_path, 'rb') as handle:
-            self.tokenizer = pickle.load(handle)
-        with open(max_length_path, 'r') as f:
-            self.max_length = int(f.read())
+    def __init__(self, fe_model, caption_model_path, tokenizer_path, max_length_path):
         self.fe_model = fe_model
+        self.caption_model_path = caption_model_path
+        self.tokenizer_path = tokenizer_path
+        self.max_length_path = max_length_path
+        self.caption_model = None
+        self.tokenizer = None
+        self.max_length = None
+        self.load_model()
+
+    def load_model(self):
+        # Load tokenizer and max length
+        with open(self.tokenizer_path, 'rb') as handle:
+            self.tokenizer = pickle.load(handle)
+        with open(self.max_length_path, 'r') as f:
+            self.max_length = int(f.read())
+        # Load captioning model
+        self.caption_model = tf.keras.models.load_model(self.caption_model_path)
 
     def read_image(self, path, img_size=224):
         img = load_img(path, color_mode='rgb', target_size=(img_size, img_size))
@@ -57,10 +68,11 @@ class ImageCaptioningModel:
                 break
         return in_text
 
-
-# Initialize the model
+# Define the feature extraction model
 fe = tf.keras.applications.DenseNet201(weights='imagenet', include_top=False, pooling='avg')
-caption_model = ImageCaptioningModel('model.h5', 'tokenizer.pkl', 'max_length.txt', fe)
+
+# Initialize the captioning model instance
+caption_model_instance = ImageCaptioningModel(fe, 'caption_model_path', 'tokenizer.pkl', 'max_length.txt')
 
 class ImageApi:
     class Upload(Resource):
@@ -91,7 +103,7 @@ class ImageApi:
                         f.write(response.read())
 
                 image_path = 'temp.jpg'
-                caption = caption_model.predict_caption(image_path)
+                caption = caption_model_instance.predict_caption(image_path)
 
                 return jsonify({'caption': caption})
             except Exception as e:
@@ -100,4 +112,3 @@ class ImageApi:
 # Add resources to API
 api.add_resource(ImageApi.Upload, '/upload')
 api.add_resource(ImageApi.Predict, '/predict')
-
