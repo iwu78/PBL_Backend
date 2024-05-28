@@ -32,6 +32,7 @@ from api.concussion import concussion_api
 from api.songs import Song_api
 from api.model import model_api
 from api.image import images_bp
+from api.recovery import recovery_api
 from api.nlp import nlp_api
 from api.caption import caption_api  # Import the new caption API
 
@@ -69,14 +70,10 @@ app.register_blueprint(concussion_api)
 app.register_blueprint(Song_api)
 app.register_blueprint(model_api)
 app.register_blueprint(images_bp)
-<<<<<<< HEAD
-app.register_blueprint(nlp_api)
-app.register_blueprint(caption_api)  # register the new caption API
-=======
 app.register_blueprint(places_api)
+app.register_blueprint(recovery_api)
 # app.register_blueprint(stock_api)
 
->>>>>>> 786ed5a3b37535c6aed80eb27eefed04ce82c52f
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
