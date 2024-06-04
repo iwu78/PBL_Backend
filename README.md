@@ -1,9 +1,10 @@
 ### Steganography
 Steganography is a technique for hiding secret messages within other non-secret data. This project explores the art of steganography, allowing users to encode and decode messages within images, text, or audio files for covert communication. With advanced encryption techniques and secure data handling, Steganography provides a secure and reliable platform for hidden message exchange.
 ### Collabora
-The Image Editor tool provides users with a versatile platform for editing images. Featuring a range of editing functionalities such as cropping, resizing, filters, and effects, users can enhance their photos effortlessly. Whether it's for personal use or professional projects, the Image Editor offers a user-friendly interface and powerful editing capabilities to meet various editing needs.
-### Stockml
-The Chatbot is an AI-powered conversational agent designed to engage users in natural language conversations. Whether it's answering questions, providing recommendations, or just chatting, the Chatbot offers a personalized and interactive experience. With advanced natural language processing capabilities, the Chatbot provides intelligent responses and adapts to user inputs, enhancing the overall user experience.
+Collabora was ideated to address certain struggles that we and fellow students have experienced in their academic career. With several tests on a timely basis, there are often questions that we forget to ask our teachers in school and are frantically trying to figure out the solution the night before. Collabora acts as a mediator between teachers or experts of the topic in which the user can post a question publiclyin which teachers or experts can also see and answer those questions, other students also have the ability to answer the question which promotes peer to peer communication which is essential.
+### Stock ML
+Using foundational Machine Learning concepts, given the SP500 datasets I have created an ML model that once trained can be used to predict the viability of an investment and the probability that your money will increase in terms of the Stock. Created a UI which asks users for the opening price, closing price, highest price, high price, low price to effectively predict the viability of the users investment.
+
 
 
 ### Spotify 
