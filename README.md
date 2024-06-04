@@ -1,3 +1,5 @@
+- Being a backend, this repository is dedicated to developing APIs and necessary models to host data collection, a key example of this is databases. We have connected the Frontend and Backend via the concept of fetching the backend. We fetch links for specific APIs based on their registered blueprint name and URL prefix.
+
 ### Steganography
 Steganography is a technique for hiding secret messages within other non-secret data. This project explores the art of steganography, allowing users to encode and decode messages within images, text, or audio files for covert communication. With advanced encryption techniques and secure data handling, Steganography provides a secure and reliable platform for hidden message exchange.
 ### Collabora
